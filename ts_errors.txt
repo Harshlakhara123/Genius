@@ -1,0 +1,5 @@
+﻿.next/types/validator.ts(42,39): error TS2307: Cannot find module '../../app/page.js' or its corresponding type declarations.
+app/(dashboard)/(routes)/conversation/page.tsx(16,10): error TS2724: '"openai/resources"' has no exported member named 'ChatCompletionRequestMessage'. Did you mean 'ChatCompletionMessage'?
+app/(dashboard)/(routes)/conversation/page.tsx(41,46): error TS2339: Property 'post' does not exist on type '<T = any, R = AxiosResponse<T, any, {}>, D = any>(url: string, config?: AxiosRequestConfig<D> | undefined) => Promise<R>'.
+app/api/conversation/route.ts(5,27): error TS2552: Cannot find name 'Configuration'. Did you mean 'configuration'?
+app/api/conversation/route.ts(31,39): error TS2339: Property 'createChatCompletion' does not exist on type 'OpenAI'.
