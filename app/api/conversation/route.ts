@@ -24,11 +24,11 @@ export async function POST(
             return new NextResponse("messages are required", { status: 400 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = messages[messages.length - 1].content;
 
-        const history = messages.slice(0, -1).map((msg: any) => ({
+        const history = messages.slice(0, -1).map((msg: { role: string; content: string }) => ({
             role: msg.role === "assistant" ? "model" : "user",
             parts: [{ text: msg.content }],
         }));

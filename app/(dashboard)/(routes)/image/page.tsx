@@ -3,30 +3,31 @@ import axios from "axios";
 
 import * as z from "zod";
 import { Heading } from "@/components/heading";
-import { ImageIcon, MessageSquare } from "lucide-react";
+import { Download, ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-import { formSchema } from "./constants";
+import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type OpenAI from "openai";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
+import { Card, CardFooter } from "@/components/ui/card";
+import Image from "next/image";
 
 const ImagePage = () => {
     const router = useRouter();
-
-    const [messages, setMessages] = useState<OpenAI.Chat.ChatCompletionMessageParam[]>([]);
+    const [images, setImages] = useState<string[]>([]);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            prompt: ""
+            prompt: "",
+            amount: "1",
+            resolution: "512x512",
         }
     });
 
@@ -35,21 +36,14 @@ const ImagePage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const userMessage: OpenAI.Chat.ChatCompletionMessageParam = {
-                role: "user",
-                content: values.prompt,
-            };
+            setImages([]);
+            const response = await axios.post("/api/image", values);
 
-            const newMessages = [...messages, userMessage];
+            const urls = response.data.map((image: { url: string }) => image.url);
 
-            const response = await axios.post("/api/conversation", {
-                messages: newMessages,
-            });
-
-            setMessages((current) => [...current, userMessage, response.data]);
+            setImages(urls);
             form.reset();
-        } catch (error: any) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: unknown) {
             console.log(error);
         } finally {
             router.refresh();
@@ -76,15 +70,75 @@ const ImagePage = () => {
                             <FormField
                                 name="prompt"
                                 render={({ field }) => (
-                                    <FormItem className="col-span-12 lg:col-span-10">
+                                    <FormItem className="col-span-12 lg:col-span-6">
                                         <FormControl className="m-0 p-0">
                                             <Input
                                                 className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                                 disabled={isLoading}
-                                                placeholder=""
+                                                placeholder="A picture of talking tom"
                                                 {...field}
                                             />
                                         </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="amount"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-12 lg:col-span-2">
+                                        <Select
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue defaultValue={field.value} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {amountOptions.map((option) => (
+                                                    <SelectItem
+                                                        key={option.value}
+                                                        value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="resolution"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-12 lg:col-span-2">
+                                        <Select
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue defaultValue={field.value} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {resolutionOptions.map((option) => (
+                                                    <SelectItem
+                                                        key={option.value}
+                                                        value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </FormItem>
                                 )}
                             />
@@ -101,24 +155,34 @@ const ImagePage = () => {
                         </div>
                     )}
 
-                    {messages.length === 0 && !isLoading && (
-                        <Empty label="No conversation" />
+                    {images.length === 0 && !isLoading && (
+                        <Empty label="No images generated" />
                     )}
 
-                    <div className="flex flex-col-reverse gap-y-4">
-                        {messages.map((message, index) => (
-                            <div
-                                key={index}
-                                className={`p-3 rounded-lg ${message.role === "user"
-                                        ? "bg-violet-500/10 text-violet-700"
-                                        : "bg-muted"
-                                    }`}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
+                        {images.map((src) => (
+                            <Card
+                                key={src}
+                                className="rounded-lg overflow-hidden"
                             >
-                                {message.role === "user" ?  <UserAvatar/> : <BotAvatar/>}
-                                <p className="text-sm">
-                                {typeof message.content === "string" ? message.content : null}
-                                </p>
-                            </div>
+                                <div className="relative aspect-square">
+                                    <Image
+                                        alt="Image"
+                                        fill
+                                        src={src}
+                                    />
+                                </div>
+                                <CardFooter className="p-2">
+                                    <Button
+                                        onClick={() => window.open(src)}
+                                        variant="secondary"
+                                        className="w-full"
+                                    >
+                                        <Download />
+                                        Download
+                                    </Button>
+                                </CardFooter>
+                            </Card>
                         ))}
                     </div>
                 </div>
