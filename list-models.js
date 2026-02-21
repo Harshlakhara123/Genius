@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const env = fs.readFileSync('c:\\webDevProject\\genius\\.env', 'utf8');
 const keyMatch = env.match(/GOOGLE_API_KEY=(.*)/);

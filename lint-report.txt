@@ -1,0 +1,52 @@
+﻿
+> genius@0.1.0 lint
+> eslint
+
+
+C:\webDevProject\genius\app\(dashboard)\(routes)\code\page.tsx
+  78:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\webDevProject\genius\app\(dashboard)\(routes)\conversation\page.tsx
+  51:25  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  52:13  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+C:\webDevProject\genius\app\(dashboard)\(routes)\image\page.tsx
+   6:31  warning  'MessageSquare' is defined but never used                                                              @typescript-eslint/no-unused-vars
+  16:13  warning  'OpenAI' is defined but never used                                                                     @typescript-eslint/no-unused-vars
+  19:10  warning  'UserAvatar' is defined but never used                                                                 @typescript-eslint/no-unused-vars
+  20:10  warning  'BotAvatar' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+  49:25  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  50:13  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+C:\webDevProject\genius\app\(dashboard)\(routes)\music\page.tsx
+  16:13  warning  'OpenAI' is defined but never used                                                                     @typescript-eslint/no-unused-vars
+  19:10  warning  'UserAvatar' is defined but never used                                                                 @typescript-eslint/no-unused-vars
+  20:10  warning  'BotAvatar' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+  43:25  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  44:13  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+C:\webDevProject\genius\app\(dashboard)\(routes)\video\page.tsx
+  41:25  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  42:13  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+
+C:\webDevProject\genius\app\api\code\route.ts
+  42:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\webDevProject\genius\app\api\conversation\route.ts
+  31:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\webDevProject\genius\app\api\image\route.ts
+  49:9   error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  50:75  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  55:9   error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  59:47  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+
+C:\webDevProject\genius\components\loader.tsx
+  2:8  warning  'Image' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\webDevProject\genius\list-models.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Γ£û 24 problems (12 errors, 12 warnings)
+  0 errors and 4 warnings potentially fixable with the `--fix` option.
+

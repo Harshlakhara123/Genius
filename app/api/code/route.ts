@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         role: "user",
         parts: [{ text: systemInstruction }],
       },
-      ...messages.slice(0, -1).map((msg: any) => ({
+      ...messages.slice(0, -1).map((msg: { role: string; content: string }) => ({
         role: msg.role === "assistant" ? "model" : "user",
         parts: [{ text: msg.content }],
       })),

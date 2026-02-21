@@ -75,7 +75,7 @@ const CodePage = () => {
 
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
     } finally {
       router.refresh();
@@ -142,9 +142,8 @@ const CodePage = () => {
               return (
                 <div
                   key={index}
-                  className={`p-3 rounded-lg ${
-                    message.role === "user" ? "bg-violet-500/10 text-violet-700" : "bg-muted"
-                  }`}
+                  className={`p-3 rounded-lg ${message.role === "user" ? "bg-violet-500/10 text-violet-700" : "bg-muted"
+                    }`}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
