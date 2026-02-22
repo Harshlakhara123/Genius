@@ -22,6 +22,7 @@ import { BotAvatar } from "@/components/bot-avatar";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { formSchema } from "./constants";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 // ✅ Language detection helper
 function detectLanguage(text: string): string {
@@ -49,6 +50,7 @@ function cleanCodeBlock(content: string): string {
 }
 
 const CodePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [messages, setMessages] = useState<OpenAI.Chat.ChatCompletionMessageParam[]>([]);
 
@@ -78,7 +80,7 @@ const CodePage = () => {
       form.reset();
     } catch (error: any) {
       if (error?.response?.status === 403) {
-        toast.error(error.response.data);
+        proModal.onOpen();
       } else {
         toast.error("Something went wrong");
       }

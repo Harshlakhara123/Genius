@@ -6,6 +6,7 @@ import { Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 interface FreeCounterProps {
     apiLimitCount: number;
@@ -14,6 +15,7 @@ interface FreeCounterProps {
 export const FreeCounter = ({
     apiLimitCount = 0,
 }: FreeCounterProps) => {
+    const proModal = useProModal();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -38,7 +40,7 @@ export const FreeCounter = ({
                             indicatorColor="bg-gradient-to-r from-violet-500 via-green-500 to-pink-500"
                         />
                     </div>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white border-0">
+                    <Button onClick={proModal.onOpen} className="w-full bg-blue-600 hover:bg-blue-700 text-white border-0">
                         Upgrade
                         <Zap className="w-4 h-4 ml-2 fill-white" />
                     </Button>
