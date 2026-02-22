@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
@@ -24,7 +25,16 @@ export async function POST(
             return new NextResponse("messages are required", { status: 400 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const freeTrial = await checkApiLimit();
+
+        if (!freeTrial) {
+            return new NextResponse("Your free limit is exceeded , please upgrade to become a genius", { status: 403 });
+        }
+
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash",
+            systemInstruction: "You are a helpful AI assistant. Always respond in plain text without any markdown formatting like asterisks, bolding, italics, or hashtags. Never output character symbols for text decoration."
+        });
 
         const prompt = messages[messages.length - 1].content;
 
@@ -40,6 +50,8 @@ export async function POST(
         const result = await chat.sendMessage(prompt);
         const response = await result.response;
         const text = response.text();
+
+        await increaseApiLimit();
 
         return NextResponse.json({
             role: "assistant",

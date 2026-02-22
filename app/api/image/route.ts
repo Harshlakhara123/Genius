@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { VertexAI } from "@google-cloud/vertexai";
 
 export async function POST(
@@ -26,6 +27,12 @@ export async function POST(
         }
         if (!resolution) {
             return new NextResponse("resolution is required", { status: 400 });
+        }
+
+        const freeTrial = await checkApiLimit();
+
+        if (!freeTrial) {
+            return new NextResponse("Your free limit is exceeded , please upgrade to become a genius", { status: 403 });
         }
 
         const vertexAI = new VertexAI({ project: process.env.GOOGLE_CLOUD_PROJECT, location: process.env.GOOGLE_CLOUD_LOCATION });
@@ -62,6 +69,8 @@ export async function POST(
                 });
             }
         }
+
+        await increaseApiLimit();
 
         return NextResponse.json(images);
     } catch (error) {
