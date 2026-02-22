@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
@@ -20,6 +21,12 @@ export async function POST(req: Request) {
 
     if (!messages || messages.length === 0) {
       return new NextResponse("Messages are required", { status: 400 });
+    }
+
+    const freeTrial = await checkApiLimit();
+
+    if (!freeTrial) {
+      return new NextResponse("Your free limit is exceeded , please upgrade to become a genius", { status: 403 });
     }
 
     //  Use Gemini model
@@ -54,6 +61,8 @@ export async function POST(req: Request) {
     const result = await chat.sendMessage(prompt);
     const response = await result.response;
     const text = response.text();
+
+    await increaseApiLimit();
 
     return NextResponse.json({
       role: "assistant",

@@ -3,6 +3,7 @@
 import axios from "axios";
 import * as z from "zod";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import type OpenAI from "openai";
@@ -75,8 +76,12 @@ const CodePage = () => {
 
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
-    } catch (error: unknown) {
-      console.error(error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        toast.error(error.response.data);
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
       router.refresh();
     }
@@ -119,7 +124,7 @@ const CodePage = () => {
                   </FormItem>
                 )}
               />
-              <Button className="col-span-12 lg:col-span-2 w-full" disabled={isLoading}>
+              <Button className="col-span-12 lg:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
                 Generate
               </Button>
             </form>
