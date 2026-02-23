@@ -95,21 +95,21 @@ const CodePage = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#000000] text-zinc-50 pb-12">
       <Heading
         title="Code Generation"
-        description="Generate code from descriptive text"
+        description="Generate robust code from natural language."
         icon={Code}
-        iconColor="text-green-700"
-        bgColor="bg-green-700/10"
+        iconColor="text-green-400"
+        bgColor="bg-green-500/10"
       />
 
-      <div className="px-4 lg:px-8">
+      <div className="px-4 lg:px-8 mt-4">
         <div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+              className="rounded-2xl border border-zinc-800 w-full p-4 px-3 md:px-6 focus-within:shadow-sm focus-within:border-zinc-700 bg-zinc-950/80 backdrop-blur-xl grid grid-cols-12 gap-4 transition-all"
             >
               <FormField
                 name="prompt"
@@ -117,75 +117,80 @@ const CodePage = () => {
                   <FormItem className="col-span-12 lg:col-span-10">
                     <FormControl className="m-0 p-0">
                       <Input
-                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent bg-transparent text-zinc-100 placeholder:text-zinc-500"
                         disabled={isLoading}
-                        placeholder="Solve Koko eating bananas problem in C++"
+                        placeholder="Write an elegant binary search tree in Python."
                         {...field}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <Button className="col-span-12 lg:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
+              <Button className="col-span-12 lg:col-span-2 w-full bg-zinc-100 hover:bg-white text-zinc-900 rounded-xl font-medium transition-all" disabled={isLoading}>
                 Generate
               </Button>
             </form>
           </Form>
         </div>
 
-        <div className="space-y-4 mt-4">
+        <div className="space-y-6 mt-8">
           {isLoading && (
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+            <div className="p-8 rounded-2xl w-full flex items-center justify-center bg-zinc-900/50 border border-zinc-800">
               <Loader />
             </div>
           )}
 
-          {messages.length === 0 && !isLoading && <Empty label="No code generated yet" />}
+          {messages.length === 0 && !isLoading && <Empty label="No code generated yet." />}
 
-          <div className="flex flex-col-reverse gap-y-4">
+          <div className="flex flex-col-reverse gap-y-6">
             {messages.map((message, index) => {
               const content = typeof message.content === "string" ? cleanCodeBlock(message.content) : "";
 
               return (
                 <div
                   key={index}
-                  className={`p-3 rounded-lg ${message.role === "user" ? "bg-violet-500/10 text-violet-700" : "bg-muted"
-                    }`}
+                  className={`p-6 rounded-2xl flex flex-col gap-4 ${message.role === "user" ? "bg-zinc-950 border border-zinc-800 text-zinc-200" : "bg-zinc-900/50 text-zinc-300 border border-zinc-800"}`}
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-3">
                     {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                    <span className="text-xs text-gray-500">
-                      {message.role === "user" ? "You" : "Code Generator"}
+                    <span className="text-sm font-medium text-zinc-400">
+                      {message.role === "user" ? "You" : "Genius Code"}
                     </span>
                   </div>
 
-                  {/* ✅ Syntax-highlighted code rendering */}
-                  {message.role === "assistant" ? (
-                    <div className="relative">
-                      <Button
-                        onClick={() => handleCopy(content)}
-                        className="absolute right-2 top-2 text-xs bg-gray-700 hover:bg-gray-600 text-white"
-                        size="sm"
-                      >
-                        Copy
-                      </Button>
-                      <SyntaxHighlighter
-                        language={detectLanguage(content)}
-                        style={vscDarkPlus}
-                        wrapLongLines
-                        customStyle={{
-                          borderRadius: "0.5rem",
-                          fontSize: "0.85rem",
-                          background: "rgb(30, 30, 30)",
-                          paddingTop: "2.5rem",
-                        }}
-                      >
+                  <div className="pl-12">
+                    {/* ✅ Syntax-highlighted code rendering */}
+                    {message.role === "assistant" ? (
+                      <div className="relative group">
+                        <Button
+                          onClick={() => handleCopy(content)}
+                          className="absolute right-3 top-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          size="sm"
+                        >
+                          Copy
+                        </Button>
+                        <SyntaxHighlighter
+                          language={detectLanguage(content)}
+                          style={vscDarkPlus}
+                          wrapLongLines
+                          customStyle={{
+                            borderRadius: "0.75rem",
+                            fontSize: "0.875rem",
+                            background: "#09090b",
+                            padding: "2.5rem 1.5rem 1.5rem 1.5rem",
+                            border: "1px solid #27272a",
+                            margin: 0
+                          }}
+                        >
+                          {content}
+                        </SyntaxHighlighter>
+                      </div>
+                    ) : (
+                      <p className="text-sm md:text-base leading-relaxed wrap-break-word whitespace-pre-wrap">
                         {content}
-                      </SyntaxHighlighter>
-                    </div>
-                  ) : (
-                    <p className="text-sm">{content}</p>
-                  )}
+                      </p>
+                    )}
+                  </div>
                 </div>
               );
             })}

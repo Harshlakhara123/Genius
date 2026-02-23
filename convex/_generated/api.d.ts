@@ -9,6 +9,7 @@
  */
 
 import type * as apiLimit from "../apiLimit.js";
+import type * as subscription from "../subscription.js";
 import type * as user from "../user.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   apiLimit: typeof apiLimit;
+  subscription: typeof subscription;
   user: typeof user;
 }>;
 

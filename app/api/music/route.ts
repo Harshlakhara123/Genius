@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import Replicate from "replicate";
 
+export const maxDuration = 60;
+
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN!
 });
