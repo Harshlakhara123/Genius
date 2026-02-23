@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProModal } from "@/components/pro-modal";
+import dynamic from "next/dynamic";
+
+const ProModal = dynamic(() => import("@/components/pro-modal").then(mod => mod.ProModal), { ssr: false });
 
 export const ModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
@@ -10,12 +12,12 @@ export const ModalProvider = () => {
         setIsMounted(true);
     }, []);
 
-    if(!isMounted){
+    if (!isMounted) {
         return null;
     }
     return (
         <>
-        <ProModal />
+            <ProModal />
         </>
     )
 }

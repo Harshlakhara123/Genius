@@ -59,20 +59,20 @@ const ImagePage = () => {
 
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#000000] text-zinc-50 pb-12">
             <Heading
                 title="Image Generation"
-                description="Turn your words into image"
+                description="Turn your words into breathtaking visuals."
                 icon={ImageIcon}
-                iconColor="text-pink-700"
-                bgColor="bg-pink-700/10"
+                iconColor="text-pink-400"
+                bgColor="bg-pink-500/10"
             />
-            <div className="px-4 lg:px-8">
+            <div className="px-4 lg:px-8 mt-4">
                 <div>
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+                            className="rounded-2xl border border-zinc-800 w-full p-4 px-3 md:px-6 focus-within:shadow-sm focus-within:border-zinc-700 bg-zinc-950/80 backdrop-blur-xl grid grid-cols-12 gap-4 transition-all"
                         >
                             <FormField
                                 name="prompt"
@@ -80,9 +80,9 @@ const ImagePage = () => {
                                     <FormItem className="col-span-12 lg:col-span-6">
                                         <FormControl className="m-0 p-0">
                                             <Input
-                                                className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                                                className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent bg-transparent text-zinc-100 placeholder:text-zinc-500"
                                                 disabled={isLoading}
-                                                placeholder="A picture of talking tom"
+                                                placeholder="A futuristic city with flying cars in cyberpunk style"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -101,15 +101,16 @@ const ImagePage = () => {
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-300 focus:ring-0">
                                                     <SelectValue defaultValue={field.value} />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
                                                 {amountOptions.map((option) => (
                                                     <SelectItem
                                                         key={option.value}
                                                         value={option.value}
+                                                        className="focus:bg-zinc-800 focus:text-zinc-100 cursor-pointer"
                                                     >
                                                         {option.label}
                                                     </SelectItem>
@@ -131,15 +132,16 @@ const ImagePage = () => {
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-300 focus:ring-0">
                                                     <SelectValue defaultValue={field.value} />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
                                                 {resolutionOptions.map((option) => (
                                                     <SelectItem
                                                         key={option.value}
                                                         value={option.value}
+                                                        className="focus:bg-zinc-800 focus:text-zinc-100 cursor-pointer"
                                                     >
                                                         {option.label}
                                                     </SelectItem>
@@ -149,15 +151,15 @@ const ImagePage = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button className="col-span-12 lg:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
+                            <Button className="col-span-12 lg:col-span-2 w-full bg-zinc-100 hover:bg-white text-zinc-900 rounded-xl font-medium transition-all" disabled={isLoading}>
                                 Generate
                             </Button>
                         </form>
                     </Form>
                 </div>
-                <div className="space-y-4 mt-4">
+                <div className="space-y-6 mt-8">
                     {isLoading && (
-                        <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+                        <div className="p-8 rounded-2xl w-full flex items-center justify-center bg-zinc-900/50 border border-zinc-800">
                             <Loader />
                         </div>
                     )}
@@ -166,26 +168,27 @@ const ImagePage = () => {
                         <Empty label="No images generated" />
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
                         {images.map((src) => (
                             <Card
                                 key={src}
-                                className="rounded-lg overflow-hidden"
+                                className="rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 hover:border-zinc-700 transition-colors shadow-none"
                             >
                                 <div className="relative aspect-square">
                                     <Image
                                         alt="Image"
                                         fill
                                         src={src}
+                                        className="object-cover"
                                     />
                                 </div>
-                                <CardFooter className="p-2">
+                                <CardFooter className="p-4 bg-zinc-950/80">
                                     <Button
                                         onClick={() => window.open(src)}
                                         variant="secondary"
-                                        className="w-full"
+                                        className="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-colors"
                                     >
-                                        <Download />
+                                        <Download className="w-4 h-4 mr-2" />
                                         Download
                                     </Button>
                                 </CardFooter>

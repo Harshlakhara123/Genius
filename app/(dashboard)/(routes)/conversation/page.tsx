@@ -33,7 +33,6 @@ const ConversationPage = () => {
         }
     });
 
-
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -62,22 +61,21 @@ const ConversationPage = () => {
         }
     }
 
-
     return (
-        <div>
+        <div className="min-h-screen bg-[#000000] text-zinc-50 pb-12">
             <Heading
                 title="Conversation"
-                description="Advanced conversation model"
+                description="Advanced conversation model."
                 icon={MessageSquare}
-                iconColor="text-violet-500"
+                iconColor="text-violet-400"
                 bgColor="bg-violet-500/10"
             />
-            <div className="px-4 lg:px-8">
+            <div className="px-4 lg:px-8 mt-4">
                 <div>
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+                            className="rounded-2xl border border-zinc-800 w-full p-4 px-3 md:px-6 focus-within:shadow-sm focus-within:border-zinc-700 bg-zinc-950/80 backdrop-blur-xl grid grid-cols-12 gap-4 transition-all"
                         >
                             <FormField
                                 name="prompt"
@@ -85,43 +83,45 @@ const ConversationPage = () => {
                                     <FormItem className="col-span-12 lg:col-span-10">
                                         <FormControl className="m-0 p-0">
                                             <Input
-                                                className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                                                className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent bg-transparent text-zinc-100 placeholder:text-zinc-500"
                                                 disabled={isLoading}
-                                                placeholder="How do i calculate the radius of a circle"
+                                                placeholder="How do I calculate the radius of a circle?"
                                                 {...field}
                                             />
                                         </FormControl>
                                     </FormItem>
                                 )}
                             />
-                            <Button className="col-span-12 lg:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
+                            <Button className="col-span-12 lg:col-span-2 w-full bg-zinc-100 hover:bg-white text-zinc-900 rounded-xl font-medium transition-all" disabled={isLoading}>
                                 Generate
                             </Button>
                         </form>
                     </Form>
                 </div>
-                <div className="space-y-4 mt-4">
+                <div className="space-y-6 mt-8">
                     {isLoading && (
-                        <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+                        <div className="p-8 rounded-2xl w-full flex items-center justify-center bg-zinc-900/50 border border-zinc-800">
                             <Loader />
                         </div>
                     )}
 
                     {messages.length === 0 && !isLoading && (
-                        <Empty label="No conversation" />
+                        <Empty label="No conversation started." />
                     )}
 
-                    <div className="flex flex-col-reverse gap-y-4">
+                    <div className="flex flex-col-reverse gap-y-6">
                         {messages.map((message, index) => (
                             <div
                                 key={index}
-                                className={`p-3 rounded-lg ${message.role === "user"
-                                    ? "bg-violet-500/10 text-violet-700"
-                                    : "bg-muted"
+                                className={`p-6 rounded-2xl flex items-start gap-x-4 ${message.role === "user"
+                                    ? "bg-zinc-950 border border-zinc-800 text-zinc-200"
+                                    : "bg-zinc-900/50 text-zinc-300 border border-zinc-800"
                                     }`}
                             >
-                                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                                <p className="text-sm">
+                                <div className="mt-1">
+                                    {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                                </div>
+                                <p className="text-sm md:text-base leading-relaxed wrap-break-word whitespace-pre-wrap flex-1">
                                     {typeof message.content === "string" ? message.content : null}
                                 </p>
                             </div>

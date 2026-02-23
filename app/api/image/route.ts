@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { VertexAI } from "@google-cloud/vertexai";
 
+export const maxDuration = 60;
+
 export async function POST(
     req: Request
 ) {
